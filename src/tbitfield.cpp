@@ -122,7 +122,7 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 
 TBitField TBitField::operator~(void) // отрицание
 {
-	for (i=0; i<(this.GetLength(); i++)
+	for (i=0; i<(this.GetLength()/32+1; i++)
 	{
 		~(this.pMem[i]);
 	}
