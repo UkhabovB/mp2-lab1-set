@@ -77,7 +77,8 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
 	this.BitLen=bf.BitLen;
 	this.Memlen=bf.Memlen;
-	this.*pMem= bf.*pMem;
+	for (i=0; i<bf.GetLenght; i++)
+	this.pMem[i]= bf.pMem[i];
 }
 
 int TBitField::operator==(const TBitField &bf) const // сравнение
@@ -132,8 +133,17 @@ TBitField TBitField::operator~(void) // отрицание
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {	
+	for (i=0; i<bf.GetLenght; i++)
+		{
+			bf.SetBit(i)
+			istr >> bf;
+		}	
 }
-
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
+		
+		for (i=0; i<bf.GetLenght; i++)
+		{
+			ostr << bf.GetBit(i);
+		}
 }
