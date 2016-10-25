@@ -6,6 +6,9 @@
 // Множество - реализация через битовые поля
 
 #include "tset.h"
+#include <iostream>
+
+using namespace std;
 
 TSet::TSet(int mp) : BitField(-1)
 {
@@ -21,8 +24,9 @@ TSet::TSet(const TSet &s) : BitField(-1)
 }
 
 
+
 // конструктор преобразования типа
-iTSet::TSet(const TBitField &bf) : BitField(-1)
+TSet::TSet(const TBitField &bf) : BitField(-1)
 {
 	this.MaxPower=bf.GetLength();
 	this.BitField=bf
@@ -32,7 +36,7 @@ TSet::operator TBitField()
 {
 }
 
-hint TSet::GetMaxPower(void) const // получить макс. к-во эл-тов
+int TSet::GetMaxPower(void) const // получить макс. к-во эл-тов
 {
 	return this.MaxPower;
 }
@@ -40,6 +44,7 @@ hint TSet::GetMaxPower(void) const // получить макс. к-во эл-т
 
 int TSet::IsMember(const int Elem) const // элемент множества?
 {
+	
 	if this.BitField.GetBit(Elem)=0;
     return 0;
 	else 
@@ -48,12 +53,20 @@ int TSet::IsMember(const int Elem) const // элемент множества?
 
 void TSet::InsElem(const int Elem) // включение элемента множества
 {
- this.BitField.SetBit(Elem);	
+if Elem<=this.MaxPower	
+ this.BitField.SetBit(Elem);
+	else 
+	cout << "Неверный номер элемента";
+	
 }
+
 
 void TSet::DelElem(const int Elem) // исключение элемента множества
 {
+	if Elem<=this.MaxPower	
 	this.BitField.ClrBit(Elem);
+	else 
+	cout << "Неверный номер элемента";
 }
 
 // теоретико-множественные операции
