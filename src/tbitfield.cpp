@@ -7,16 +7,27 @@
 
 #include "tbitfield.h"
 #include "algorithm"
+#define CreateBitfieldWithIncorrectLength 1
+#define SetBitWithIncorrectNumber 2
+#define ClrBitWithIncorrectNumber 3
+#define GetBitWithIncorrectNumber 4
+
+
 
 TBitField::TBitField(int len)
 {
-	this->BitLen=len;
-	this->MemLen = len / 32 + 1;
-	this->pMem = new TELEM[this->MemLen];
-	for (int i = 0; i<this->MemLen; i++)
+	if (len > 0)
 	{
-		this->pMem[i] = 0;
+		this->BitLen = len;
+		this->MemLen = len / 32 + 1;
+		this->pMem = new TELEM[this->MemLen];
+		for (int i = 0; i < this->MemLen; i++)
+		{
+			this->pMem[i] = 0;
+		}
 	}
+	else
+		throw CreateBitfieldWithIncorrectLength;
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
@@ -56,20 +67,31 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
+	if ((n>0) && (n <= this->GetLength()))
 	(this->pMem[GetMemIndex(n)]) |= GetMemMask(n);
+	else 
+		throw SetBitWithIncorrectNumber;
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-	(this->pMem[GetMemIndex(n)]) &= (~GetMemMask(n));
+	if ((n > 0) && (n <= this->GetLength()))
+		(this->pMem[GetMemIndex(n)]) &= (~GetMemMask(n));
+	else
+		throw ClrBitWithIncorrectNumber;
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-if (((this->pMem[GetMemIndex(n)])&GetMemMask(n)) == 0)
-  return 0;
-  else
-  return 1;
+	if ((n > 0) && (n <= this->GetLength()))
+	{
+		if (((this->pMem[GetMemIndex(n)])&GetMemMask(n)) == 0)
+			return 0;
+		else
+			return 1;
+	}
+	else
+		throw GetBitWithIncorrectNumber;
 }
 
 // битовые операции
