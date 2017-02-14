@@ -12,8 +12,8 @@
 #define ClrBitWithIncorrectNumber 3
 #define GetBitWithIncorrectNumber 4
 
-
-
+　
+　
 TBitField::TBitField(int len)
 {
 	if (len > 0)
@@ -67,7 +67,7 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
-	if ((n>0) && (n <= this->GetLength()))
+	if ((n>=0) && (n < this->GetLength()))
 	(this->pMem[GetMemIndex(n)]) |= GetMemMask(n);
 	else 
 		throw SetBitWithIncorrectNumber;
@@ -75,7 +75,7 @@ void TBitField::SetBit(const int n) // установить бит
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-	if ((n > 0) && (n <= this->GetLength()))
+	if ((n >= 0) && (n < this->GetLength()))
 		(this->pMem[GetMemIndex(n)]) &= (~GetMemMask(n));
 	else
 		throw ClrBitWithIncorrectNumber;
@@ -83,7 +83,7 @@ void TBitField::ClrBit(const int n) // очистить бит
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-	if ((n > 0) && (n <= this->GetLength()))
+	if ((n >= 0) && (n < this->GetLength()))
 	{
 		if (((this->pMem[GetMemIndex(n)])&GetMemMask(n)) == 0)
 			return 0;
@@ -130,7 +130,7 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
 	this->MemLen = max(this->MemLen, bf.MemLen);
-	for (int i = 0; i < this->MemLen; i++)
+	for (int i = 0; i < max(this->MemLen, bf.MemLen); i++)
 		(this->pMem[i] | bf.pMem[i]);
 	return *this;
 }
