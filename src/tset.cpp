@@ -7,29 +7,27 @@
 
 #include "tset.h"
 #include <iostream>
+#include "algorithm"
+#define IncorrectNumber 1
 
 using namespace std;
 
-TSet::TSet(int mp) : BitField(-1)
+TSet::TSet(int mp) : BitField(mp)
 {
 	this->MaxPower=mp;
-	TBitField BitField(mp);
 }
 
 // конструктор копирования
-TSet::TSet(const TSet &s) : BitField(-1)
+TSet::TSet(const TSet &s) : BitField(s.BitField)
 {
 	this->MaxPower = s.MaxPower;
-	this->BitField = s.BitField;
 }
 
 
-
 // конструктор преобразования типа
-TSet::TSet(const TBitField &bf) : BitField(-1)
+TSet::TSet(const TBitField &bf) : BitField(bf)
 {
 	this->MaxPower = bf.GetLength();
-	this->BitField = bf;
 }
 
 TSet::operator TBitField()
@@ -55,10 +53,10 @@ int TSet::IsMember(const int Elem) const // элемент множества?
 
 void TSet::InsElem(const int Elem) // включение элемента множества
 {
-if (Elem<=this->MaxPower)
- this->BitField.SetBit(Elem);
-	else 
-	cout << "Неверный номер элемента";
+	if (Elem <= this->MaxPower)
+		this->BitField.SetBit(Elem);
+	else
+		throw IncorrectNumber;
 	
 }
 
@@ -68,7 +66,7 @@ void TSet::DelElem(const int Elem) // исключение элемента мн
 	if (Elem<=this->MaxPower)
 	this->BitField.ClrBit(Elem);
 	else 
-	cout << "Неверный номер элемента";
+	throw IncorrectNumber;
 }
 
 // теоретико-множественные операции
@@ -98,8 +96,10 @@ int TSet::operator!=(const TSet &s) const // сравнение
 
 TSet TSet::operator+(const TSet &s) // объединение
 {
-	this->BitField|s.BitField;
-	return *this;
+	
+	TSet sres(max(this->MaxPower, s.MaxPower));
+	sres.BitField =this->BitField|s.BitField;
+	return sres;
 }
 
 TSet TSet::operator+(const int Elem) // объединение с элементом
@@ -116,13 +116,14 @@ TSet TSet::operator-(const int Elem) // разность с элементом
 
 TSet TSet::operator*(const TSet &s) // пересечение
 {
-	this->BitField&s.BitField;
-	return *this;
+	TSet sres(this->MaxPower);
+	sres=this->BitField&s.BitField;
+	return sres;
 }
 
 TSet TSet::operator~(void) // дополнение
 {
-	~(this->BitField);
+	this->BitField=(~(this->BitField));
 	return *this;
 }
 
